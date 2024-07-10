@@ -4,6 +4,8 @@
  */
 package com.duarte.app.learn.view;
 
+import com.duarte.app.learn.database.Database;
+import com.duarte.app.learn.entity.Annotation;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -104,13 +106,15 @@ public class MainView extends JFrame{
             bt1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                    // Fechar o JFrame atual
-                    dispose();
                     
-                    // Abrir novo JFrame
-                    ListAnnotationView listnotes = new ListAnnotationView();
-                    listnotes.startView();
-                    listnotes.setVisible(true);
+                    if(saveNote(tf1.getText(), ta.getText())){
+                        // Fechar o JFrame atual
+                        dispose();
+                        // Abrir novo JFrame
+                        ListAnnotationView listnotes = new ListAnnotationView();
+                        listnotes.startView();
+                        listnotes.setVisible(true);
+                    }
                     
                 }
             });
@@ -127,6 +131,18 @@ public class MainView extends JFrame{
         }
                 
         
+    }
+    
+    
+    public boolean saveNote(String name, String details){
+        Annotation note = new Annotation(name, details, false);
+        try{
+            Database.getInstance().create(note);
+            return true;
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
     }
     
     
