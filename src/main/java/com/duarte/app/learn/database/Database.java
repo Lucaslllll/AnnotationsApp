@@ -49,17 +49,48 @@ public class Database {
     
     public void create(Annotation note) {
         String sql = "INSERT INTO Annotation(name, details, isCompleted) VALUES (?, ?, ?);";
+        
         try (Connection conn = DriverManager.getConnection(url);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
             pstmt.setString(1, note.getName());
             pstmt.setString(2, note.getDetails());
             pstmt.setBoolean(3, false);
             pstmt.executeUpdate();
+        
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+        
         }
     }
-
+    
+    public Annotation get(int id) {
+        Annotation note = null;
+        String sql = "SELECT * FROM Annotation WHERE id = ?;";
+        
+        try (Connection conn = DriverManager.getConnection(url);
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql)) {
+            
+            while (rs.next()) {
+                
+                note = new Annotation(
+                    rs.getString("name"),
+                    rs.getString("details"),
+                    rs.getBoolean("isCompleted")
+                
+                );
+                
+            }
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        
+        }
+        
+        return note;
+    }
+    
     public List<Annotation> list() {
         List<Annotation> annotations = new ArrayList<>();
         String sql = "SELECT * FROM Annotation;";
@@ -69,11 +100,14 @@ public class Database {
             ResultSet rs = stmt.executeQuery(sql)) {
             
             while (rs.next()) {
+                
                 Annotation note = new Annotation(
-                        rs.getString("name"),
-                        rs.getString("details"),
-                        rs.getBoolean("isCompleted")
+                    rs.getString("name"),
+                    rs.getString("details"),
+                    rs.getBoolean("isCompleted")
+                
                 );
+                
                 annotations.add(note);
             }
             
@@ -85,29 +119,37 @@ public class Database {
         return annotations;
     }
 
-//    public void atualizarUsuario(Usuario usuario) {
-//        String sql = "UPDATE usuarios SET nome = ?, email = ? WHERE id = ?";
-//        try (Connection conn = DriverManager.getConnection(url);
-//             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-//            pstmt.setString(1, usuario.getNome());
-//            pstmt.setString(2, usuario.getEmail());
-//            pstmt.setInt(3, usuario.getId());
-//            pstmt.executeUpdate();
-//        } catch (SQLException e) {
-//            System.out.println(e.getMessage());
-//        }
-//    }
-//
-//    public void deletarUsuario(int id) {
-//        String sql = "DELETE FROM usuarios WHERE id = ?";
-//        try (Connection conn = DriverManager.getConnection(url);
-//             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-//            pstmt.setInt(1, id);
-//            pstmt.executeUpdate();
-//        } catch (SQLException e) {
-//            System.out.println(e.getMessage());
-//        }
-//    }
+    public void update(Annotation note) {
+        String sql = "UPDATE Annotation SET name = ?, details = ?, isCompleted = ? WHERE id = ?";
+        
+        try (Connection conn = DriverManager.getConnection(url);
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, note.getName());
+            pstmt.setString(2, note.getDetails());
+            pstmt.setBoolean(3, note.isIsCompleted());
+            pstmt.setInt(4, note.getId());
+            pstmt.executeUpdate();
+        
+        } catch (SQLException e) {
+            e.printStackTrace();
+        
+        }
+    }
+
+    public void delete(int id) {
+        String sql = "DELETE FROM Annotation WHERE id = ?";
+        try (Connection conn = DriverManager.getConnection(url);
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setInt(1, id);
+            pstmt.executeUpdate();
+        
+        } catch (SQLException e) {
+            e.printStackTrace();
+        
+        }
+    }
     
     
 }

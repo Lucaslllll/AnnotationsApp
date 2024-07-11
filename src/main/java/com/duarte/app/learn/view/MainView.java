@@ -106,17 +106,43 @@ public class MainView extends JFrame{
             bt1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                    
-                    if(saveNote(tf1.getText(), ta.getText())){
-                        // Fechar o JFrame atual
-                        dispose();
-                        // Abrir novo JFrame
-                        ListAnnotationView listnotes = new ListAnnotationView();
-                        listnotes.startView();
-                        listnotes.setVisible(true);
+                    if(!tf1.getText().equals("") && !ta.getText().equals("")){
+                        if(saveNote(tf1.getText(), ta.getText())){
+                            // Fechar o JFrame atual
+                            dispose();
+                            // Abrir novo JFrame
+                            ListAnnotationView listnotes = new ListAnnotationView();
+                            listnotes.startView();
+                            listnotes.setVisible(true);
+                        }
                     }
                     
                 }
+            });
+      
+            
+            painel.add(Box.createRigidArea(new Dimension(0, 20)));
+      
+            // botao para listagem
+            JButton bt2 = new JButton();
+            bt2.setText("Ver anotações");
+            bt2.setAlignmentX(Component.CENTER_ALIGNMENT);
+            bt2.setMaximumSize(new Dimension(200, 50));
+            bt2.setBackground(Color.YELLOW);
+            painel.add(bt2);
+            
+            bt2.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                   
+                    dispose();
+                    // Abrir novo JFrame
+                    ListAnnotationView listnotes = new ListAnnotationView();
+                    listnotes.startView();
+                    listnotes.setVisible(true);
+                    
+                }
+                
             });
             
             
