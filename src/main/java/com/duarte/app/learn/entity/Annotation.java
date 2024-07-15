@@ -19,6 +19,13 @@ public class Annotation extends Entity{
         this.isCompleted = isCompleted;
     }
     
+    public Annotation(int id, String name, String details, boolean isCompleted){
+        this.setId(id);
+        this.name = name;
+        this.details = details;
+        this.isCompleted = isCompleted;
+    }
+    
     public String getName() {
         return name;
     }

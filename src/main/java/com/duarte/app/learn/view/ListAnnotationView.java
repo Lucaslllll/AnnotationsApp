@@ -7,12 +7,16 @@ package com.duarte.app.learn.view;
 import com.duarte.app.learn.database.Database;
 import com.duarte.app.learn.entity.Annotation;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -55,7 +59,7 @@ public class ListAnnotationView extends JFrame {
             // listagem component
             DefaultListModel items = new DefaultListModel();
             for(Annotation note : Database.getInstance().list()){
-                items.addElement(note.getName());
+                items.addElement(note);
             }
             
             
@@ -71,6 +75,45 @@ public class ListAnnotationView extends JFrame {
             
             
             
+            // colocar boxlayout na vertical com X_AXIS
+            JPanel painelButtons = new JPanel();
+            painelButtons.setLayout(new BoxLayout(painelButtons, BoxLayout.X_AXIS));
+            
+            JButton apagar = new JButton();
+            JButton ler = new JButton();
+            apagar.setText("Apagar");
+            ler.setText("Ler");
+            painelButtons.add(apagar);
+            painelButtons.add(ler);
+            painel.add(painelButtons);
+            
+            apagar.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // removendo da tela
+                    int index = list.getSelectedIndex();
+                    items.remove(index);
+                    
+                    // removendo do db
+                    Database.getInstance().delete(items.getElementAt(index).getId());
+
+                    int size = items.getSize();
+
+                    if (size == 0) { //Nobody's left, disable firing.
+                        apagar.setEnabled(false);
+
+                    } else {
+                        if (index == items.getSize()) {
+                            index--;
+                        
+                        }
+
+                        list.setSelectedIndex(index);
+                        list.ensureIndexIsVisible(index);
+                    }
+                }
+
+            });
             
             add(painel);
             

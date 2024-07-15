@@ -18,6 +18,10 @@ public class AppLearn {
     public static void main(String[] args) {
         Database db = new Database();
         
+        
+//        for(Annotation a : db.list())
+//            db.delete(a.getId());
+            
         System.out.println(db.list());
         
         // obs: ctrl + j = ctrl + d do sublime

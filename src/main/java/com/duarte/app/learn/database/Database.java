@@ -102,6 +102,7 @@ public class Database {
             while (rs.next()) {
                 
                 Annotation note = new Annotation(
+                    rs.getInt("id"),
                     rs.getString("name"),
                     rs.getString("details"),
                     rs.getBoolean("isCompleted")
