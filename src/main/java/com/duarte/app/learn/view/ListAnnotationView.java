@@ -87,6 +87,7 @@ public class ListAnnotationView extends JFrame {
             painelButtons.add(ler);
             painel.add(painelButtons);
             
+           
             apagar.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -94,8 +95,10 @@ public class ListAnnotationView extends JFrame {
                     int index = list.getSelectedIndex();
                     items.remove(index);
                     
+                    
                     // removendo do db
-                    Database.getInstance().delete(items.getElementAt(index).getId());
+                    Annotation note = (Annotation) items.get(index);
+                    Database.getInstance().delete(note.getId());
 
                     int size = items.getSize();
 
@@ -111,6 +114,25 @@ public class ListAnnotationView extends JFrame {
                         list.setSelectedIndex(index);
                         list.ensureIndexIsVisible(index);
                     }
+                }
+
+            });
+            
+            ler.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // removendo da tela
+                    int index = list.getSelectedIndex();
+                    
+                    // pegando a nota do db
+                    Annotation note = (Annotation) items.get(index);
+                    
+
+                    dispose();
+                    
+                    AnnotationView annotationview = new AnnotationView();
+                    annotationview.startView(note);
+                    annotationview.setVisible(true);
                 }
 
             });
